@@ -161,11 +161,11 @@ async function loadMemos(){
     const rightDiv=document.createElement('div'); rightDiv.className='memo-right';
     const dateSpan=document.createElement('span'); dateSpan.className='date-span';
     dateSpan.textContent=new Date(data.updated).toLocaleString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-    const menuBtn=document.createElement('button'); menuBtn.textContent='…'; menuBtn.className='menu-btn longpress-btn';
+    const menuBtn=document.createElement('button'); menuBtn.textContent='⋯'; menuBtn.className='menu-btn longpress-btn';
     const menuPopup=document.createElement('div'); menuPopup.className='menu-popup';
     const copyAction=document.createElement('button'); copyAction.textContent='Copy';
     copyAction.onclick=async(e)=>{ e.stopPropagation(); navigator.clipboard.writeText(data.content||''); showToast('Copied'); menuPopup.style.display='none'; }
-    const deleteAction=document.createElement('button'); deleteAction.textContent='Delete';
+    const deleteAction=document.createElement('button'); deleteAction.textContent='❌';
     deleteAction.onclick=async(e)=>{ e.stopPropagation(); await setDoc(doc(db,'users',auth.currentUser.uid,'memos',d.id),{deletedAt:Date.now()},{merge:true}); li.remove(); showToast('Moved to Trash'); menuPopup.style.display='none'; }
     menuPopup.append(copyAction,deleteAction);
     menuBtn.onclick=(e)=>{ e.stopPropagation(); menuPopup.style.display=(menuPopup.style.display==='block')?'none':'block'; }
@@ -199,7 +199,7 @@ async function loadTrash(){
     const rightDiv=document.createElement('div'); rightDiv.className='memo-right';
     const dateSpan=document.createElement('span'); dateSpan.className='date-span';
     dateSpan.textContent=new Date(data.deletedAt).toLocaleString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-    const restoreBtn=document.createElement('button'); restoreBtn.textContent='Restore';
+    const restoreBtn=document.createElement('button'); restoreBtn.textContent='↩️';
     restoreBtn.onclick=async(e)=>{ e.stopPropagation(); await setDoc(doc(db,'users',auth.currentUser.uid,'memos',d.id),{deletedAt:null},{merge:true}); li.remove(); showToast('Restored'); }
     const deleteBtn=document.createElement('button'); deleteBtn.textContent='Delete';
     deleteBtn.onclick=async(e)=>{ e.stopPropagation(); await setDoc(doc(db,'users',auth.currentUser.uid,'memos',d.id),{deletedAt:Date.now()-31*24*60*60*1000},{merge:true}); li.remove(); showToast('Deleted'); }
